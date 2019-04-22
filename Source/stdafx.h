@@ -17,8 +17,10 @@
 #include <tchar.h>
 
 #include<QtCore/QtCore>
-#include<QtNetwork/qtcpserver.h>
-#include<QtNetwork/qtcpsocket.h>
+#include <QtNetwork/qnetworkaccessmanager.h>
 #include<QtWidgets/qapplication.h>
+#include <QtWidgets/qwidget.h>
 #include <QtSql/QtSql>
+#include <QtNetwork/QNetworkReply>
+
 // reference additional headers your program requires here

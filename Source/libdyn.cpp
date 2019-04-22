@@ -19,7 +19,7 @@ Q_IMPORT_PLUGIN(QODBCDriverPlugin)
 #pragma comment(lib,"Qt5Network.lib")
 #pragma comment(lib,"Qt5Sql.lib")
 #pragma comment(lib,"../plugins/sqldrivers/qsqlodbc.lib")
-
+#pragma comment(lib,"libcurlpp.lib")
 #pragma comment(lib,"../plugins/platforms/qwindows.lib")
 
 
@@ -43,7 +43,7 @@ Q_IMPORT_PLUGIN(QODBCDriverPlugin)
 #pragma comment(lib,"../plugins/sqldrivers/qsqlodbcd.lib")
 
 #pragma comment(lib,"../plugins/platforms/qwindowsd.lib")
-
+#pragma comment(lib,"libcurlppd.lib")
 #endif
 
 
@@ -63,5 +63,7 @@ Q_IMPORT_PLUGIN(QODBCDriverPlugin)
 #pragma comment(lib,"Iphlpapi.lib")
 #pragma comment(lib, "userenv.lib")
 
+#pragma comment(lib, "Wldap32.lib")
 
 
+#pragma comment(lib,"LIBCURL.lib")
