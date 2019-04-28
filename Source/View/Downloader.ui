@@ -16,7 +16,8 @@
   <property name="styleSheet">
    <string notr="true">QLabel{
 	color:#ff0000
-}</string>
+}
+QTabBar::tab:selected { background-color: yellow; }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
