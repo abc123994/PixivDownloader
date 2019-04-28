@@ -26,6 +26,7 @@ void Downloader::ShowSatus(QString str)
 }
 void Downloader::Reset()
 {
+	qDebug() << "enable btn";
 	this->m_ui->btn_download->setEnabled(true);
 }
 #include "Downloader.moc"

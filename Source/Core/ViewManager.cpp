@@ -20,7 +20,7 @@ ViewManager::ViewManager(QObject* p)
 	m_mainwindow->setCurrentIndex(pages::pg_login);
 	m_mainwindow->setCurrentWidget(m_login);
 	connect(m_login, SIGNAL(StartLogin(QString, QString)),m_web, SLOT(OnLogin(QString, QString)));
-	connect(m_downloader, SIGNAL(StartDownLoad(QString)), m_web, SLOT(OnStart(QString)));
+	connect(m_downloader, SIGNAL(StartDownLoad(QString)), m_web, SLOT(OnStart(QString)),Qt::QueuedConnection);
 	connect(m_web, SIGNAL(current_proc(QString)), m_downloader, SLOT(ShowSatus(QString)));
 	connect(m_web, SIGNAL(proc_done()), m_downloader, SLOT(Reset()));
 	connect(m_web, &HttpMethods::login_ok, [&]() {

@@ -183,10 +183,10 @@ void HttpMethods::HandleDownLoad()
 {
 	std::string file = "test.txt";
 	std::ofstream ofs(file, std::ostream::binary);
-	std::string tmp = m_page_url + m_download_list.dequeue().toStdString();
-	if (m_download_list.size() > 0)
-	{
 
+	if (!m_download_list.isEmpty())
+	{
+		std::string tmp = m_page_url + m_download_list.dequeue().toStdString();
 		Initail(ofs, (char*)tmp.c_str());
 		DownLoadPic(GetDownLoadUrl());
 	}
