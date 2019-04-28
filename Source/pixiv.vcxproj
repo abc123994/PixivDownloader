@@ -22,9 +22,9 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{AA16183E-E888-4DAB-917B-848DEF77B978}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>WebCrawer</RootNamespace>
+    <RootNamespace>pixiv</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-    <ProjectName>PixivDownLoader</ProjectName>
+    <ProjectName>PixivDownloader</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
