@@ -9,7 +9,7 @@ class HttpMethods : public QObject {
  public:
   HttpMethods(QObject* parent = 0);
   ~HttpMethods();
-  void ResetCURL();
+
   struct curl_slist* m_headers = NULL;
   CURL* m_curl;
   CURLcode m_res;
@@ -25,6 +25,8 @@ public slots:
 	void OnStart(QString url);
 	void OnLogin(QString, QString);
  private:
+  void CleanCookie();
+  void ResetCURL();
   std::string GetPostKey();
  
 

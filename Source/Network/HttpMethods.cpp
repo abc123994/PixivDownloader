@@ -75,6 +75,10 @@ void HttpMethods::ResetCURL()
 	curlpp::Cleanup myCleanup;
 }
 
+void HttpMethods::CleanCookie()
+{
+	QFile("cookies.txt").remove();
+}
 
 
 
@@ -83,7 +87,7 @@ HttpMethods::HttpMethods(QObject* parent)
 {
 	
 	connect(this, SIGNAL(ok()), this, SLOT(HandleDownLoad()), Qt::QueuedConnection);
-	
+	this->CleanCookie();
 
 }
 void HttpMethods::OnStart(QString userid)
