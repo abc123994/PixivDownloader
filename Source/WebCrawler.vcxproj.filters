@@ -16,6 +16,12 @@
     <Filter Include="Network">
       <UniqueIdentifier>{aff8b701-f017-4943-aaf8-437e9b35f3d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{c5a8fce6-a6af-420f-88ab-5bb093b4f2f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{8fdb9de8-7051-42a0-914b-0bf3468902aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -27,8 +33,11 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Network\HttpMethods.h">
-      <Filter>Network</Filter>
+    <ClInclude Include="View\ui_Downloader.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ui_Login.h">
+      <Filter>View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +53,15 @@
     <ClCompile Include="Network\HttpMethods.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="View\Downloader.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ViewManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="View\Login.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -57,5 +75,25 @@
     <ResourceCompile Include="Source.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Network\HttpMethods.h">
+      <Filter>Network</Filter>
+    </CustomBuild>
+    <CustomBuild Include="View\Downloader.ui">
+      <Filter>View</Filter>
+    </CustomBuild>
+    <CustomBuild Include="View\Downloader.h">
+      <Filter>View</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Core\ViewManager.h">
+      <Filter>Core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="View\Login.ui">
+      <Filter>View</Filter>
+    </CustomBuild>
+    <CustomBuild Include="View\Login.h">
+      <Filter>View</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
