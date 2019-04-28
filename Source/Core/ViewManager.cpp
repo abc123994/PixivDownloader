@@ -10,7 +10,9 @@ enum pages
 };
 ViewManager::ViewManager(QObject* p)
 {
-	m_web = new HttpMethods(this);
+	m_working_thread = new QThread(this);
+	m_web = new HttpMethods();
+	m_web->moveToThread(m_working_thread);
 	m_mainwindow = new QStackedWidget;
 	m_downloader = new Downloader();
 	m_login = new Login();
@@ -23,16 +25,20 @@ ViewManager::ViewManager(QObject* p)
 	connect(m_downloader, SIGNAL(StartDownLoad(QString)), m_web, SLOT(OnStart(QString)),Qt::QueuedConnection);
 	connect(m_web, SIGNAL(current_proc(QString)), m_downloader, SLOT(ShowSatus(QString)));
 	connect(m_web, SIGNAL(proc_done()), m_downloader, SLOT(Reset()));
-	connect(m_web, &HttpMethods::login_ok, [&]() {
-		m_mainwindow->setCurrentIndex(pages::pg_download);
-		m_mainwindow->setCurrentWidget(m_downloader);
-		m_downloader->Reset();
-	});
+	connect(m_web, SIGNAL(login_ok()), this,SLOT(ToDownload()));
+	m_working_thread->start();
 	m_mainwindow->show();
 }
 
 
 ViewManager::~ViewManager()
 {
+	m_working_thread->terminate();
+	m_working_thread->deleteLater();
+}
+void ViewManager::ToDownload()
+{
+	m_mainwindow->setCurrentIndex(pages::pg_download);
+	m_mainwindow->setCurrentWidget(m_downloader);
 }
 #include "ViewManager.moc"
