@@ -14,11 +14,11 @@ Downloader::Downloader()
 Downloader::~Downloader()
 {
 }
-void Downloader::on_btn_download_clicked()
+void Downloader::on_btn_download_user_clicked()
 {
-	StartDownLoad(this->m_ui->edit_userid->text().trimmed());
+	StartDownLoadUser(this->m_ui->edit_userid->text().trimmed());
 	qDebug() << "download start...";
-	m_ui->btn_download->setEnabled(false);
+	this->m_ui->tabWidget->setEnabled(false);
 }
 void Downloader::ShowSatus(QString str)
 {
@@ -27,6 +27,13 @@ void Downloader::ShowSatus(QString str)
 void Downloader::Reset()
 {
 	qDebug() << "enable btn";
-	this->m_ui->btn_download->setEnabled(true);
+	this->m_ui->tabWidget->setEnabled(true);
+	this->m_ui->edit_illustid->setText("");
+	this->m_ui->edit_userid->setText("");
+}
+void Downloader::on_btn_download_pic_clicked()
+{
+	StartDownLoadPic(this->m_ui->edit_illustid->text().trimmed());
+	this->m_ui->tabWidget->setEnabled(false);
 }
 #include "Downloader.moc"

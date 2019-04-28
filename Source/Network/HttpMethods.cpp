@@ -90,12 +90,18 @@ HttpMethods::HttpMethods(QObject* parent)
 	this->CleanCookie();
 
 }
-void HttpMethods::OnStart(QString userid)
+void HttpMethods::OnDownloadByUser(QString userid)
 {
 	this->ResetCURL();
-	qDebug() << "OnStart...";
+	qDebug() << "OnStart by user query...";
 	m_userid = userid.toInt();
 	GetAllIllust((char*)QString("https://www.pixiv.net/ajax/user/%1/profile/all").arg(QString::number(m_userid)).toStdString().c_str());
+}
+void HttpMethods::OnDownloadByPic(QString picid)
+{
+	this->ResetCURL();
+	m_download_list.append(picid);
+	this->HandleDownLoad();
 }
 std::string HttpMethods::GetPostKey()
 {
@@ -192,7 +198,9 @@ void HttpMethods::HandleDownLoad()
 	{
 		std::string tmp = m_page_url + m_download_list.dequeue().toStdString();
 		Initail(ofs, (char*)tmp.c_str());
-		DownLoadPic(GetDownLoadUrl());
+		
+		
+		DownLoadPic(HandlePageUrl());
 	}
 	else
 	{
@@ -237,9 +245,11 @@ bool HttpMethods::Initail(std::ofstream& os, char* url)
 		}
 	}
 }
-std::string HttpMethods::GetDownLoadUrl()
+
+std::string HttpMethods::HandlePageUrl()
 {
 	std::regex reg("\"original\":\"(.*?)\"");
+	std::regex reg1("\"authorId\":\"(.*?)\"");
 	std::smatch m;
 	std::ifstream infile("test.txt");
 	std::string line;
@@ -248,8 +258,19 @@ std::string HttpMethods::GetDownLoadUrl()
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
-		//cout << "compair.." << line << "\t"  << endl;
-		if (regex_search(line, m, reg)) {
+		if (regex_search(line, m, reg1))//set user id
+		{
+			for (auto &match : m) {
+				cout << match.str() << endl;
+				if (QString::fromStdString(match.str()).contains("\"authorId\"") == false)
+				{
+					this->m_userid = QString::fromStdString(match.str()).toInt();
+					qDebug() << "set userid:" << QString::fromStdString(match.str());
+
+				}
+			}
+		}
+		if (regex_search(line, m, reg)) {//get original img url
 
 			for (auto &match : m) {
 				cout << match.str() << endl;

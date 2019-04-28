@@ -22,8 +22,9 @@ class HttpMethods : public QObject {
  private slots:
   void HandleDownLoad();
 public slots:
-	void OnStart(QString url);
-	void OnLogin(QString, QString);
+  void OnDownloadByUser(QString userid);
+  void OnDownloadByPic(QString picid);
+  void OnLogin(QString, QString);
  private:
   void CleanCookie();
   void ResetCURL();
@@ -32,7 +33,8 @@ public slots:
 
   void GetAllIllust(char* url);
   bool Initail(std::ofstream&, char*);
-  std::string GetDownLoadUrl();  // do reg again  img-original
+  std::string HandlePageUrl();  // set userid and return download url
+  
   void DownLoadPic(std::string);
 
   // std::string m_og_url = "https://embed.pixiv.net/decorate.php?illust_id=";

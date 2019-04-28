@@ -12,6 +12,7 @@ public:
 	~ViewManager();
 public slots:
 	void ToDownload();
+	void InitWidget();
 private:
 	QStackedWidget* m_mainwindow;
 	Downloader* m_downloader;
