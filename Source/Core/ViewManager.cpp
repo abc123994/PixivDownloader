@@ -15,8 +15,9 @@ ViewManager::ViewManager(QObject* p)
 	m_web->moveToThread(m_working_thread);
 	InitWidget();
 	connect(m_login, SIGNAL(StartLogin(QString, QString)),m_web, SLOT(OnLogin(QString, QString)));
-	connect(m_downloader, SIGNAL(StartDownLoadUser(QString)), m_web, SLOT(OnDownloadByUser(QString)),Qt::QueuedConnection);
-	connect(m_downloader, SIGNAL(StartDownLoadPic(QString)), m_web, SLOT(OnDownloadByPic(QString)), Qt::QueuedConnection);
+	connect(m_downloader, SIGNAL(StartDownLoadUser(QString,QString)), m_web, SLOT(OnDownloadByUser(QString,QString)),Qt::QueuedConnection);
+	connect(m_downloader, SIGNAL(StartDownLoadPic(QString,QString)), m_web, SLOT(OnDownloadByPic(QString,QString)), Qt::QueuedConnection);
+	connect(m_downloader, SIGNAL(StartDownLoadDaily(QString, QString)), m_web, SLOT(OnDownloadByDaily(QString, QString)), Qt::QueuedConnection);
 	connect(m_web, SIGNAL(current_proc(QString)), m_downloader, SLOT(ShowSatus(QString)));
 	connect(m_web, SIGNAL(proc_done()), m_downloader, SLOT(Reset()));
 	connect(m_web, SIGNAL(login_ok()), this,SLOT(ToDownload()));
@@ -43,8 +44,9 @@ void ViewManager::InitWidget()
 	m_login = new Login();
 	m_mainwindow->addWidget(m_login);
 	m_mainwindow->addWidget(m_downloader);
-	m_mainwindow->setGeometry(0, 0, 400, 300);
+	m_mainwindow->setGeometry(0, 0, 530, 400);
 	m_mainwindow->setCurrentIndex(pages::pg_login);
 	m_mainwindow->setCurrentWidget(m_login);
+	m_mainwindow->setAttribute(Qt::WidgetAttribute::WA_QuitOnClose,true);
 }
 #include "ViewManager.moc"

@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>702</width>
-    <height>362</height>
+    <width>620</width>
+    <height>419</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>pixivDownloader</string>
@@ -30,12 +36,12 @@ QTabBar::tab:selected { background-color: yellow; }</string>
      </property>
      <property name="font">
       <font>
-       <family>Britannic Bold</family>
+       <family>Comic Sans MS</family>
        <pointsize>20</pointsize>
       </font>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_9">
       <attribute name="title">
@@ -74,6 +80,11 @@ QTabBar::tab:selected { background-color: yellow; }</string>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_10">
+      <property name="font">
+       <font>
+        <family>Algerian</family>
+       </font>
+      </property>
       <attribute name="title">
        <string>IllustId</string>
       </attribute>
@@ -99,6 +110,41 @@ QTabBar::tab:selected { background-color: yellow; }</string>
           <string>Download</string>
          </property>
         </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="DailyTop50">
+      <attribute name="title">
+       <string>DailyIllust</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QCalendarWidget" name="calendarWidget"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_download_daily">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Arial</family>
+             <pointsize>20</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Download</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

@@ -90,18 +90,26 @@ HttpMethods::HttpMethods(QObject* parent)
 	this->CleanCookie();
 
 }
-void HttpMethods::OnDownloadByUser(QString userid)
+void HttpMethods::OnDownloadByUser(QString userid,QString path)
 {
 	this->ResetCURL();
+	m_downloaded_path = path.toStdString() + "/";
 	qDebug() << "OnStart by user query...";
 	m_userid = userid.toInt();
-	GetAllIllust((char*)QString("https://www.pixiv.net/ajax/user/%1/profile/all").arg(QString::number(m_userid)).toStdString().c_str());
+	GetAllIllust((char*)QString::fromStdString(m_user_illust_all).arg(QString::number(m_userid)).toStdString().c_str());
 }
-void HttpMethods::OnDownloadByPic(QString picid)
+void HttpMethods::OnDownloadByPic(QString picid,QString path)
 {
 	this->ResetCURL();
+	m_downloaded_path = path.toStdString() + "/";
 	m_download_list.append(picid);
 	this->HandleDownLoad();
+}
+void HttpMethods::OnDownloadByDaily(QString date,QString path)
+{
+	this->ResetCURL();
+	m_downloaded_path = path.toStdString() + "/";
+	GetDailyIllust(date, (char*)QString::fromStdString(m_daily_illust_url).arg(date).toStdString().c_str());
 }
 std::string HttpMethods::GetPostKey()
 {
@@ -135,7 +143,7 @@ void HttpMethods::OnLogin(QString usr,QString psw)
 	std::string url_init = "https://accounts.pixiv.net/login";
 	std::string url_login = "https://accounts.pixiv.net/login?lang=en";
 	qDebug() << "get post key";
-	Initail(ofs, (char*)url_init.c_str());
+	Initial(ofs, (char*)url_init.c_str());
 	qDebug() << "login";
 	char postfile[1024];
 
@@ -168,15 +176,7 @@ void HttpMethods::GetAllIllust(char* url)
 
 
 	std::ostringstream ofs;
-	curl_easy_setopt(m_curl, CURLOPT_HTTPHEADER, m_headers);
-	curl_easy_setopt(m_curl, CURLOPT_URL, url);
-	curl_easy_setopt(m_curl, CURLOPT_VERBOSE, 1L);
-	curl_easy_setopt(m_curl, CURLOPT_COOKIEFILE, "cookies.txt");
-	curl_easy_setopt(m_curl, CURLOPT_COOKIEJAR, "cookies.txt");
-	curl_easy_setopt(m_curl, CURLOPT_HEADERDATA, &ofs);
-	curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, &ofs);
-	curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, data_write);
-	curl_easy_perform(m_curl);
+	Initial(ofs,url);
 	cout << ofs.str() << endl;
 	QJsonDocument doc = QJsonDocument::fromJson(QString::fromStdString(ofs.str()).split("\r\n\r\n").at(1).toUtf8());
 	QJsonObject obj = doc.object();
@@ -189,6 +189,19 @@ void HttpMethods::GetAllIllust(char* url)
 	this->HandleDownLoad();
 
 }
+void HttpMethods::GetDailyIllust(QString d,char* url)
+{
+	std::ostringstream ofs;
+	Initial(ofs, url);
+	cout << ofs.str() << endl;
+	QJsonDocument doc = QJsonDocument::fromJson(QString::fromStdString(ofs.str()).split("\r\n\r\n").at(1).toUtf8());
+	QJsonObject obj = doc.object();
+	QJsonArray ary = obj["contents"].toArray();
+	for (int i = 0; i < ary.size(); i++) {
+		m_download_list.append(QString::number(ary.at(i).toObject().value("illust_id").toInt()));	
+	}
+	this->HandleDownLoad();
+}
 void HttpMethods::HandleDownLoad()
 {
 	std::string file = "test.txt";
@@ -197,7 +210,7 @@ void HttpMethods::HandleDownLoad()
 	if (!m_download_list.isEmpty())
 	{
 		std::string tmp = m_page_url + m_download_list.dequeue().toStdString();
-		Initail(ofs, (char*)tmp.c_str());
+		Initial(ofs, (char*)tmp.c_str());
 		
 		
 		DownLoadPic(HandlePageUrl());
@@ -209,7 +222,7 @@ void HttpMethods::HandleDownLoad()
 		curl_easy_cleanup(m_curl);
 	}
 }
-bool HttpMethods::Initail(std::ofstream& os, char* url)
+bool HttpMethods::Initial(std::ofstream& os, char* url)
 {
 	//crawl info you want you want
 	if (m_curl)
@@ -243,9 +256,46 @@ bool HttpMethods::Initail(std::ofstream& os, char* url)
 		{
 
 		}
+		
 	}
+	return false;
 }
+bool HttpMethods::Initial(std::ostringstream& os, char* url)
+{
+	if (m_curl)
+	{
+		try {
 
+			curl_easy_setopt(m_curl, CURLOPT_HTTPHEADER, m_headers);
+			curl_easy_setopt(m_curl, CURLOPT_URL, url);
+			curl_easy_setopt(m_curl, CURLOPT_VERBOSE, 0L);
+			curl_easy_setopt(m_curl, CURLOPT_COOKIEFILE, "cookies.txt");
+			curl_easy_setopt(m_curl, CURLOPT_COOKIEJAR, "cookies.txt");
+			curl_easy_setopt(m_curl, CURLOPT_HEADERDATA, &os);
+			curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, &os);
+			curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, data_write);
+
+			m_res = curl_easy_perform(m_curl);
+
+			if (m_res != 0) {
+
+				cout << curl_easy_strerror(m_res);
+				curl_easy_cleanup(m_curl);
+			}
+			else
+			{
+
+			}
+
+			return true;
+		}
+		catch (exception e)
+		{
+		}
+		
+	}
+	return false;
+}
 std::string HttpMethods::HandlePageUrl()
 {
 	std::regex reg("\"original\":\"(.*?)\"");
@@ -288,10 +338,9 @@ std::string HttpMethods::HandlePageUrl()
 void HttpMethods::DownLoadPic(std::string str)
 {
 	QStringList tmp = QString::fromStdString(str).split("/");
-	if (!QDir(QString("C:/Users/User/Pictures/%1/").arg(QString::number(m_userid))).exists());
-	QDir().mkdir(QString("C:/Users/User/Pictures/%1/").arg(QString::number(m_userid)));
+	
 	std::ostringstream os1;
-	QString path = QString("C:/Users/User/Pictures/%1/%2").arg(QString::number(m_userid)).arg(tmp.last());
+	QString path = QString::fromStdString(m_downloaded_path)+tmp.last();
 	std::string picurl = str;
 	std::ofstream ofs(path.toStdString(), std::ostream::binary);
 	emit current_proc(tmp.last()+"\tRemains:"+QString::number(m_download_list.size())+"files");
