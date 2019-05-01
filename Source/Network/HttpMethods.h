@@ -38,19 +38,18 @@ public slots:
 
   bool Initial(std::ofstream&, char*);
   bool Initial(std::ostringstream& ,char*);
-  std::string HandlePageUrl();  // set userid and return download url
   
   void DownLoadPic(std::string);
 
-  // std::string m_og_url = "https://embed.pixiv.net/decorate.php?illust_id=";
-  //illustid_url
-  std::string m_page_url ="https://www.pixiv.net/member_illust.php?mode=medium&illust_id=";
   
   //daily top 50
   std::string m_daily_illust_url= "https://www.pixiv.net/ranking.php?mode=daily&content=illust&date=%1&p=1&format=json";
-  
   //get user illust all
   std::string m_user_illust_all = "https://www.pixiv.net/ajax/user/%1/profile/all";
+  // get liiust series
+  std::string m_illust_id_pic_all = "https://www.pixiv.net/ajax/illust/%1/pages";
+  //illustid_url
+  std::string m_page_url = "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=";
 
   QQueue<QString> m_download_list;
   std::string m_downloaded_path;

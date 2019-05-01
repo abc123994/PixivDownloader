@@ -204,16 +204,38 @@ void HttpMethods::GetDailyIllust(QString d,char* url)
 }
 void HttpMethods::HandleDownLoad()
 {
-	std::string file = "test.txt";
-	std::ofstream ofs(file, std::ostream::binary);
+	
+	std::ostringstream s;
 
 	if (!m_download_list.isEmpty())
 	{
-		std::string tmp = m_page_url + m_download_list.dequeue().toStdString();
-		Initial(ofs, (char*)tmp.c_str());
-		
-		
-		DownLoadPic(HandlePageUrl());
+		QString illust_id = m_download_list.dequeue();
+		std::string tmp = m_page_url + illust_id.toStdString();
+		//get id series
+		auto url_all=QString::fromStdString(m_illust_id_pic_all).arg(illust_id).toStdString();
+		std::ostringstream series;
+		Initial(series, (char*)url_all.c_str());
+		auto pics= QJsonDocument::fromJson(QString::fromStdString(series.str()).split("\r\n\r\n").at(1).toUtf8())
+			.object()["body"].toArray();
+		QQueue<std::string> series_imgs;
+		for (int i=0;i<pics.size();i++)
+		{
+			series_imgs.append(pics.at(i).toObject().value("urls").toObject().value("original").toString().toStdString());
+			qDebug() << pics.at(i).toObject().value("urls").toObject().value("original").toString();
+		}
+		int illust_id_size = series_imgs.size();
+		int count = 0;
+		Initial(s, (char*)tmp.c_str());
+		while (series_imgs.isEmpty() == false) {
+			auto tmp = series_imgs.dequeue();
+			count++;
+			emit current_proc(QString::fromStdString(tmp).replace("//","/").split("/").last()+ "\tRemains:"
+				+QString::number(m_download_list.size()) +"idx\n"
+				+ QString("illust_id(%1/%2)").arg(count).arg(illust_id_size));
+			DownLoadPic(tmp);
+		}
+		emit ok();
+	
 	}
 	else
 	{
@@ -296,45 +318,7 @@ bool HttpMethods::Initial(std::ostringstream& os, char* url)
 	}
 	return false;
 }
-std::string HttpMethods::HandlePageUrl()
-{
-	std::regex reg("\"original\":\"(.*?)\"");
-	std::regex reg1("\"authorId\":\"(.*?)\"");
-	std::smatch m;
-	std::ifstream infile("test.txt");
-	std::string line;
-	std::ssub_match sm, smk;
-	std::string key;
-	while (std::getline(infile, line))
-	{
-		std::istringstream iss(line);
-		if (regex_search(line, m, reg1))//set user id
-		{
-			for (auto &match : m) {
-				cout << match.str() << endl;
-				if (QString::fromStdString(match.str()).contains("\"authorId\"") == false)
-				{
-					this->m_userid = QString::fromStdString(match.str()).toInt();
-					qDebug() << "set userid:" << QString::fromStdString(match.str());
 
-				}
-			}
-		}
-		if (regex_search(line, m, reg)) {//get original img url
-
-			for (auto &match : m) {
-				cout << match.str() << endl;
-				if (QString::fromStdString(match.str()).contains("\"original\"") == false)
-				{
-
-					qDebug() << "get img url:" << QString::fromStdString(match.str()).replace("\"", "");
-					return QString::fromStdString(match.str()).replace("\\", "").toStdString();
-				}
-			}
-		}
-	}
-	return "";
-}
 void HttpMethods::DownLoadPic(std::string str)
 {
 	QStringList tmp = QString::fromStdString(str).split("/");
@@ -343,11 +327,11 @@ void HttpMethods::DownLoadPic(std::string str)
 	QString path = QString::fromStdString(m_downloaded_path)+tmp.last();
 	std::string picurl = str;
 	std::ofstream ofs(path.toStdString(), std::ostream::binary);
-	emit current_proc(tmp.last()+"\tRemains:"+QString::number(m_download_list.size())+"files");
+	
 	if (CURLE_OK == curl_read((str), ofs, 30, m_curl))
 	{
 		qDebug() << QString::fromStdString(picurl) << "\tpic get";
-		emit ok();
+		
 	}
 	else
 	{

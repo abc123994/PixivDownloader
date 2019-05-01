@@ -39,7 +39,7 @@ void ViewManager::ToDownload()
 void ViewManager::InitWidget()
 {
 	m_mainwindow = new QStackedWidget;
-	m_mainwindow->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
+	m_mainwindow->setWindowFlags( Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
 	m_downloader = new Downloader();
 	m_login = new Login();
 	m_mainwindow->addWidget(m_login);
