@@ -44,7 +44,7 @@ void ViewManager::InitWidget()
 	m_login = new Login();
 	m_mainwindow->addWidget(m_login);
 	m_mainwindow->addWidget(m_downloader);
-	m_mainwindow->setGeometry(0, 0, 530, 400);
+	m_mainwindow->setGeometry(0, 0, 530,450);
 	m_mainwindow->setCurrentIndex(pages::pg_login);
 	m_mainwindow->setCurrentWidget(m_login);
 	m_mainwindow->setAttribute(Qt::WidgetAttribute::WA_QuitOnClose,true);

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>620</width>
-    <height>419</height>
+    <height>426</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,7 +23,8 @@
    <string notr="true">QLabel{
 	color:#ff0000
 }
-QTabBar::tab:selected { background-color: yellow; }</string>
+QTabBar::tab:selected { background-color: yellow; }
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -51,10 +52,15 @@ QTabBar::tab:selected { background-color: yellow; }</string>
        <item>
         <widget class="QLineEdit" name="edit_userid">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+          </font>
          </property>
         </widget>
        </item>
@@ -90,7 +96,16 @@ QTabBar::tab:selected { background-color: yellow; }</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
-        <widget class="QLineEdit" name="edit_illustid"/>
+        <widget class="QLineEdit" name="edit_illustid">
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="btn_download_pic">
@@ -121,7 +136,35 @@ QTabBar::tab:selected { background-color: yellow; }</string>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QCalendarWidget" name="calendarWidget"/>
+          <widget class="QCalendarWidget" name="calendarWidget">
+           <property name="font">
+            <font>
+             <family>Arial Rounded MT Bold</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 10pt &quot;Arial Rounded MT Bold&quot;;
+color:rgb(0, 0, 10);
+ QToolButton,{ 
+background-color: #000000; 
+color: #000000;
+}
+</string>
+           </property>
+           <property name="gridVisible">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QCalendarWidget::SingleSelection</enum>
+           </property>
+           <property name="verticalHeaderFormat">
+            <enum>QCalendarWidget::NoVerticalHeader</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="btn_download_daily">
